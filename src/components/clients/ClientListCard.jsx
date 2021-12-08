@@ -18,6 +18,7 @@ import {
 import { indigo } from "@mui/material/colors";
 import { useState } from "react";
 import styled from "styled-components";
+import CreateClient from "../modals/CreateClient";
 import ImportExcel from "../modals/ImportExcel";
 import {
   Canvas,
@@ -65,9 +66,14 @@ const SearchIcon = <FontAwesomeIcon icon={faSearch} />;
 const ExcelIcon = <FontAwesomeIcon icon={faFileExcel} />;
 const KeyboardIcon = <FontAwesomeIcon icon={faKeyboard} />;
 const ClientListCard = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [openExcel, setOpenExcel] = useState(false);
+  const [openSingle, setOpenSingle] = useState(false);
+
+  const handleOpenExcel = () => setOpenExcel(true);
+  const handleCloseExcel = () => setOpenExcel(false);
+  const handleOpenSingle = () => setOpenSingle(true);
+  const handleCloseSingle = () => setOpenSingle(false);
+
   return (
     <Container>
       <Canvas>
@@ -81,6 +87,7 @@ const ClientListCard = () => {
               disableElevation
               color="secondary"
               startIcon={KeyboardIcon}
+              onClick={handleOpenSingle}
               sx={{ marginLeft: "10px", height: "40px" }}
             >
               건별등록
@@ -90,18 +97,16 @@ const ClientListCard = () => {
               disableElevation
               color="success"
               startIcon={ExcelIcon}
-              onClick={handleOpen}
+              onClick={handleOpenExcel}
               sx={{ marginLeft: "10px", height: "40px" }}
             >
               엑셀등록
             </Button>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <ImportExcel handleClose={handleClose} />
+            <Modal open={openExcel} onClose={handleCloseExcel}>
+              <ImportExcel handleClose={handleCloseExcel} />
+            </Modal>
+            <Modal open={openSingle} onClose={handleCloseSingle}>
+              <CreateClient handleClose={handleCloseSingle} />
             </Modal>
           </ListActionWrapper>
         </ComponentHeaderWrapper>

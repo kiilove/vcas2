@@ -88,6 +88,10 @@ const ImportExcel = (props) => {
     props.handleClose();
   };
 
+  function renameKey(obj, oldKey, newKey) {
+    obj[newKey] = obj[oldKey];
+    delete obj[oldKey];
+  }
   const readExcel = async (file) => {
     try {
       const fileReader = await new FileReader();
@@ -96,13 +100,31 @@ const ImportExcel = (props) => {
       fileReader.onload = async (e) => {
         const buggerArray = await e.target.result;
 
-        const wb = await XLSX.read(buggerArray, { type: "buffer" });
+        const wb = await XLSX.read(buggerArray, { type: "binary" });
         const wsname = await wb.SheetNames[0];
         const ws = await wb.Sheets[wsname];
-        const data = await XLSX.utils.sheet_to_json(ws);
-        console.log(JSON.stringify(data));
-        await setItems(JSON.stringify(data));
-        await setRows(data.length);
+
+        let data = await XLSX.utils.sheet_to_json(ws, {
+          header: ["clientNumber"],
+        });
+        //console.log(XLSX.utils.sheet_to_json([{ A: "1" }]));
+        //data.forEach((obj) => renameKey(obj, "전화번호", "clientNumber"));
+        //console.log(data.keys());
+        // if (JSON.stringify(!isNaN(Object.values(data[1])))) {
+        //   alert("전화번호만 입력되어 있어야합니다.");
+        // } else {
+        //   console.log(JSON.stringify(data));
+        //   setRows(data.length);
+        //   setItems(JSON.stringify(data));
+        // }
+
+        //alert(Object.values(data[0]));
+        if (isNaN(Object.values(data[0]))) {
+          delete data[0];
+        }
+        console.log(JSON.stringify(data.filter((x) => x !== null)));
+        data && setRows(data.length);
+        data && setItems(JSON.stringify(data));
       };
     } catch (error) {
       console.error({ 읽기에러: error });
@@ -116,14 +138,14 @@ const ImportExcel = (props) => {
         method: "post",
         url: "http://localhost:7733/api/client/register/excel",
         headers: header,
-        data: JSON.stringify(setItems),
+        data: items,
       });
+      alert("데이터 저장이 완료되었습니다.");
     } catch (error) {
       alert("저장 실패!(서버 연결을 확인하세요.)");
     }
   };
 
-  const excelInfo = { rows };
   return (
     <Container>
       <Wrapper>
@@ -138,6 +160,7 @@ const ImportExcel = (props) => {
         <BodyWrapper>
           <input
             type="file"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             onChange={(e) => {
               const file = e.target.files[0];
               readExcel(file);
@@ -151,8 +174,9 @@ const ImportExcel = (props) => {
         </BodyWrapper>
         <FooterWrapper>
           <InfoTitle>
-            {excelInfo.rows - 1}건의 데이터를 확인했습니다.{<br />} 전송버튼을
-            클릭하면 데이터에 저장됩니다.
+            {rows <= 0
+              ? "올바른 엑셀파일은 선택해주세요."
+              : `${rows - 1}건의 데이터를 읽어왔습니다.`}
           </InfoTitle>
         </FooterWrapper>
       </Wrapper>
