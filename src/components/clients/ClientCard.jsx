@@ -29,6 +29,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+  margin: 10px;
 
   &:hover ${Info} {
     opacity: 1;

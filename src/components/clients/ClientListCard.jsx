@@ -6,10 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
-  Divider,
-  FormControl,
   FormControlLabel,
-  FormLabel,
   Modal,
   Radio,
   RadioGroup,
@@ -19,7 +16,7 @@ import { indigo } from "@mui/material/colors";
 import { useState } from "react";
 import styled from "styled-components";
 import CreateClient from "../modals/CreateClient";
-import ImportExcel from "../modals/ImportExcel";
+import CreateClientExcel from "../modals/CreateClientExcel";
 import {
   Canvas,
   ComponentBodyWrapper,
@@ -103,7 +100,7 @@ const ClientListCard = () => {
               엑셀등록
             </Button>
             <Modal open={openExcel} onClose={handleCloseExcel}>
-              <ImportExcel handleClose={handleCloseExcel} />
+              <CreateClientExcel handleClose={handleCloseExcel} />
             </Modal>
             <Modal open={openSingle} onClose={handleCloseSingle}>
               <CreateClient handleClose={handleCloseSingle} />

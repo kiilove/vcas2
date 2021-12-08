@@ -11,6 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip } from "@mui/material";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -70,19 +71,25 @@ const LeftMenu = () => {
             VCAS
           </div>
           <Tooltip title="캘린더" placement="right">
-            <IconBox>
-              <FontAwesomeIcon icon={faCalendarAlt} />
-            </IconBox>
+            <Link to="/calredar">
+              <IconBox>
+                <FontAwesomeIcon icon={faCalendarAlt} />
+              </IconBox>
+            </Link>
           </Tooltip>
           <Tooltip title="상담업무" placement="right">
-            <IconBox>
-              <FontAwesomeIcon icon={faPhone} />
-            </IconBox>
+            <Link to="/maketingDetail">
+              <IconBox>
+                <FontAwesomeIcon icon={faPhone} />
+              </IconBox>
+            </Link>
           </Tooltip>
           <Tooltip title="고객정보" placement="right">
-            <IconBox>
-              <FontAwesomeIcon icon={faIdCard} />
-            </IconBox>
+            <Link to="clientList">
+              <IconBox>
+                <FontAwesomeIcon icon={faIdCard} />
+              </IconBox>
+            </Link>
           </Tooltip>
           <Tooltip title="할일" placement="right">
             <IconBox>

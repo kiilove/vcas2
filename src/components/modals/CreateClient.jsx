@@ -1,7 +1,6 @@
 import {
   faExclamationCircle,
   faTimes,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,12 +11,15 @@ import {
   InputAdornment,
   InputLabel,
   TextField,
+  Tooltip,
 } from "@mui/material";
-import { green, grey, yellow } from "@mui/material/colors";
+import { green, grey, purple, yellow } from "@mui/material/colors";
 import { useState } from "react";
 import styled from "styled-components";
 import {
   Canvas,
+  CloseButton,
+  CloseWrapper,
   ComponentBodyWrapper,
   ComponentHeaderTitle,
   ComponentHeaderWrapper,
@@ -96,10 +98,12 @@ const WarningMessage = styled.span`
   height: 100%;
 `;
 
-const CreateClient = () => {
+const CreateClient = (props) => {
   const [count, setCount] = useState(1);
   const [clientList, setClientList] = useState([{ clientNumer: "" }]);
-
+  const sendClose = () => {
+    props.handleClose();
+  };
   // handle input change
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -124,9 +128,17 @@ const CreateClient = () => {
 
   return (
     <Container>
-      <Canvas>
+      <Canvas style={{ paddingTop: "0px" }}>
+        <CloseWrapper>
+          <Tooltip title="닫기">
+            <CloseButton
+              src="/img/windowClose.png"
+              onClick={() => sendClose()}
+            />
+          </Tooltip>
+        </CloseWrapper>
         <ComponentHeaderWrapper style={{ paddingBottom: "0px" }}>
-          <ComponentHeaderTitle color={green[500]}>
+          <ComponentHeaderTitle color={purple[500]}>
             고객 등록
           </ComponentHeaderTitle>
         </ComponentHeaderWrapper>
@@ -147,6 +159,7 @@ const CreateClient = () => {
                 size="small"
                 variant="outlined"
                 sx={{ mr: 1 }}
+                color="secondary"
                 onClick={() => {
                   handleAddClientList();
                 }}
@@ -160,7 +173,7 @@ const CreateClient = () => {
                 variant="contained"
                 sx={{ mr: 1 }}
                 disableElevation
-                color="success"
+                color="secondary"
               >
                 저장
               </Button>

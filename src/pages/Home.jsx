@@ -1,10 +1,12 @@
-import { Grid, Paper } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Grid } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import styled from "styled-components";
 import ClientListCard from "../components/clients/ClientListCard";
 import Header from "../components/Header";
 import LeftMenu from "../components/LeftMenu";
+import MaketingDetail from "../components/maketing/MaketingDetail";
 
 const Contianer = styled.div`
   display: flex;
@@ -54,7 +56,14 @@ const Home = () => {
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10.5}>
-              <ClientListCard />
+              <Switch>
+                <Route path="/clientList">
+                  <ClientListCard />
+                </Route>
+                <Route path="/maketingDetail">
+                  <MaketingDetail />
+                </Route>
+              </Switch>
             </Grid>
             <Grid item xs={0.5}></Grid>
           </Grid>
