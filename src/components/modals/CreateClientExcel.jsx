@@ -92,9 +92,10 @@ const CreateClientExcel = (props) => {
         if (isNaN(Object.values(data[0]))) {
           delete data[0];
         }
-        console.log(JSON.stringify(data.filter((x) => x !== null)));
-        data && setRows(data.length);
-        data && setItems(JSON.stringify(data));
+
+        //console.log(JSON.stringify(data.filter((x) => x !== null)));
+        setRows(data.length);
+        setItems(JSON.stringify(data.filter((x) => x !== null)));
       };
     } catch (error) {
       console.error({ 읽기에러: error });
@@ -129,7 +130,7 @@ const CreateClientExcel = (props) => {
         </CloseWrapper>
         <ComponentHeaderWrapper style={{ paddingBottom: "0px" }}>
           <ComponentHeaderTitle color={green[500]}>
-            엑셀 고객 등록
+            엑셀 고객 등록{rows}
           </ComponentHeaderTitle>
         </ComponentHeaderWrapper>
         <WarningWrapper>

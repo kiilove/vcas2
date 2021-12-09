@@ -13,7 +13,8 @@ import {
   TextField,
 } from "@mui/material";
 import { indigo } from "@mui/material/colors";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CreateClient from "../modals/CreateClient";
 import CreateClientExcel from "../modals/CreateClientExcel";
@@ -65,11 +66,30 @@ const KeyboardIcon = <FontAwesomeIcon icon={faKeyboard} />;
 const ClientListCard = () => {
   const [openExcel, setOpenExcel] = useState(false);
   const [openSingle, setOpenSingle] = useState(false);
+  const [getClients, setGetClients] = useState([]);
 
   const handleOpenExcel = () => setOpenExcel(true);
   const handleCloseExcel = () => setOpenExcel(false);
   const handleOpenSingle = () => setOpenSingle(true);
   const handleCloseSingle = () => setOpenSingle(false);
+  const getData = async () => {
+    const header = { "Content-type": "application/json" };
+    try {
+      const res = await axios({
+        method: "get",
+        url: "http://localhost:7733/api/client/",
+        headers: header,
+      });
+      res && setGetClients(res.data);
+      console.log(getClients);
+    } catch (err) {
+      console.log(err);
+      alert("불러오기 실패!");
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <Container>

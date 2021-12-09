@@ -42,7 +42,9 @@ const CanvasContainer = styled.div`
   height: 100%;
   margin-top: 15px;
 `;
-const Home = () => {
+
+const isLogin = false;
+const Home = (props) => {
   return (
     <Contianer>
       <LeftContainer>
@@ -56,14 +58,7 @@ const Home = () => {
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10.5}>
-              <Switch>
-                <Route path="/clientList">
-                  <ClientListCard />
-                </Route>
-                <Route path="/maketingDetail">
-                  <MaketingDetail />
-                </Route>
-              </Switch>
+              {props.child}
             </Grid>
             <Grid item xs={0.5}></Grid>
           </Grid>

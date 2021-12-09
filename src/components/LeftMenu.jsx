@@ -71,11 +71,9 @@ const LeftMenu = () => {
             VCAS
           </div>
           <Tooltip title="캘린더" placement="right">
-            <Link to="/calredar">
-              <IconBox>
-                <FontAwesomeIcon icon={faCalendarAlt} />
-              </IconBox>
-            </Link>
+            <IconBox>
+              <FontAwesomeIcon icon={faCalendarAlt} />
+            </IconBox>
           </Tooltip>
           <Tooltip title="상담업무" placement="right">
             <Link to="/maketingDetail">
@@ -85,7 +83,7 @@ const LeftMenu = () => {
             </Link>
           </Tooltip>
           <Tooltip title="고객정보" placement="right">
-            <Link to="clientList">
+            <Link to="/clientList">
               <IconBox>
                 <FontAwesomeIcon icon={faIdCard} />
               </IconBox>
@@ -104,14 +102,18 @@ const LeftMenu = () => {
         </IconGroup>
         <IconGroup style={{ justifyContent: "flex-end", marginBottom: "10px" }}>
           <Tooltip title="통합검색" placement="right">
-            <IconBox>
-              <FontAwesomeIcon icon={faSearch} />
-            </IconBox>
+            <Link to="/login">
+              <IconBox>
+                <FontAwesomeIcon icon={faSearch} />
+              </IconBox>
+            </Link>
           </Tooltip>
           <Tooltip title="자주하는 질물" placement="right">
-            <IconBox>
-              <FontAwesomeIcon icon={faQuestion} />
-            </IconBox>
+            <Link to="/register">
+              <IconBox>
+                <FontAwesomeIcon icon={faQuestion} />
+              </IconBox>
+            </Link>
           </Tooltip>
           <Tooltip title="구성원관리" placement="right">
             <IconBox>
