@@ -2,6 +2,7 @@ import { faIdCard, faPaste } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Info = styled.div`
@@ -41,6 +42,7 @@ const Icon = styled.div`
   height: 35px;
   border-radius: 50%;
   background-color: white;
+  color: ${grey[700]};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,15 +55,17 @@ const Icon = styled.div`
     transform: scale(1.1);
   }
 `;
-const ClientCard = () => {
+const ClientCard = (props) => {
   return (
     <Container>
-      <Typography variant="body1">46433464</Typography>
+      <Typography variant="body1">{props.num}</Typography>
       <Info>
-        <Tooltip title="회원정보 바로가기">
-          <Icon>
-            <FontAwesomeIcon icon={faIdCard} />
-          </Icon>
+        <Tooltip title="상담업무 바로가기">
+          <Link to={`/marketingDetail/${props.id}`}>
+            <Icon>
+              <FontAwesomeIcon icon={faIdCard} />
+            </Icon>
+          </Link>
         </Tooltip>
         <Tooltip title="복사하기">
           <Icon>

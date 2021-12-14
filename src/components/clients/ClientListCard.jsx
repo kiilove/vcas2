@@ -1,11 +1,14 @@
 import {
   faFileExcel,
   faKeyboard,
+  faRedo,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
+  CircularProgress,
+  Fade,
   FormControlLabel,
   Modal,
   Radio,
@@ -16,8 +19,10 @@ import { indigo } from "@mui/material/colors";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { BASE_URL } from "../../config/base";
 import CreateClient from "../modals/CreateClient";
 import CreateClientExcel from "../modals/CreateClientExcel";
+import SpinProgress from "../SpinProgress";
 import {
   Canvas,
   ComponentBodyWrapper,
@@ -39,7 +44,16 @@ const ListWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   padding: 20px;
+  width: 100%;
   justify-content: space-between;
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `;
 
 const ListActionWrapper = styled.div`
@@ -63,25 +77,43 @@ const ListActionBox = styled.div`
 const SearchIcon = <FontAwesomeIcon icon={faSearch} />;
 const ExcelIcon = <FontAwesomeIcon icon={faFileExcel} />;
 const KeyboardIcon = <FontAwesomeIcon icon={faKeyboard} />;
+const Redo = <FontAwesomeIcon icon={faRedo} />;
+
 const ClientListCard = () => {
   const [openExcel, setOpenExcel] = useState(false);
   const [openSingle, setOpenSingle] = useState(false);
   const [getClients, setGetClients] = useState([]);
+  const [fillterdGroup, setFillterdGroup] = useState("all");
+  const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const handleOpenExcel = () => setOpenExcel(true);
-  const handleCloseExcel = () => setOpenExcel(false);
+  const handleCloseExcel = () => {
+    setOpenExcel(false);
+    setRefresh(!refresh);
+  };
   const handleOpenSingle = () => setOpenSingle(true);
-  const handleCloseSingle = () => setOpenSingle(false);
+  const handleCloseSingle = () => {
+    setOpenSingle(false);
+    setRefresh(!refresh);
+  };
+
+  const handleGroup = (e) => {
+    e.preventDefault();
+    setFillterdGroup(e.target.value);
+  };
+
   const getData = async () => {
+    setLoading(true);
     const header = { "Content-type": "application/json" };
     try {
       const res = await axios({
         method: "get",
-        url: "http://localhost:7733/api/client/",
+        url: `${BASE_URL}/api/client/`,
         headers: header,
       });
-      res && setGetClients(res.data);
-      console.log(getClients);
+      setGetClients(res.data);
+      setLoading(false);
     } catch (err) {
       console.log(err);
       alert("불러오기 실패!");
@@ -89,7 +121,7 @@ const ClientListCard = () => {
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [refresh]);
 
   return (
     <Container>
@@ -99,6 +131,16 @@ const ClientListCard = () => {
             고객리스트
           </ComponentHeaderTitle>
           <ListActionWrapper style={{ justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              disableElevation
+              color="primary"
+              startIcon={Redo}
+              onClick={() => setRefresh(!refresh)}
+              sx={{ marginLeft: "10px", height: "40px" }}
+            >
+              새로고침
+            </Button>
             <Button
               variant="contained"
               disableElevation
@@ -129,12 +171,15 @@ const ClientListCard = () => {
         </ComponentHeaderWrapper>
         <ListActionWrapper>
           <ListActionBox>
-            <RadioGroup row name="row-radio-buttons-group">
+            <RadioGroup
+              row
+              name="row-radio-buttons-group"
+              onChange={handleGroup}
+            >
               <FormControlLabel
                 value="all"
                 control={<Radio />}
                 label="전체보기"
-                checked
               />
               <FormControlLabel
                 value="new"
@@ -170,16 +215,15 @@ const ClientListCard = () => {
         </ListActionWrapper>
         <ComponentBodyWrapper>
           <ListWrapper>
-            <ClientCard />
-            <ClientCard />
-            <ClientCard />
-            <ClientCard />
-            <ClientCard />
-            <ClientCard />
-            <ClientCard />
-            <ClientCard />
-            <ClientCard />
-            <ClientCard />
+            <LoadingWrapper>
+              <Fade in={loading} unmountOnExit>
+                <CircularProgress width="100%" justifyContent="center" />
+              </Fade>
+            </LoadingWrapper>
+            {!loading &&
+              getClients.map((item, index) => (
+                <ClientCard num={item.clientNumber} id={item._id} />
+              ))}
           </ListWrapper>
         </ComponentBodyWrapper>
       </Canvas>

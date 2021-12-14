@@ -10,12 +10,13 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-  TextField,
   Tooltip,
 } from "@mui/material";
-import { green, grey, purple, yellow } from "@mui/material/colors";
+import { grey, purple, yellow } from "@mui/material/colors";
 import { useState } from "react";
 import styled from "styled-components";
+import { BASE_URL } from "../../config/base";
+import { postData } from "../modules/PostData";
 import {
   Canvas,
   CloseButton,
@@ -100,7 +101,8 @@ const WarningMessage = styled.span`
 
 const CreateClient = (props) => {
   const [count, setCount] = useState(1);
-  const [clientList, setClientList] = useState([{ clientNumer: "" }]);
+  const [clientList, setClientList] = useState([{ clientNumber: "" }]);
+  const urlClient = `${BASE_URL}/api/client/register/clients`;
   const sendClose = () => {
     props.handleClose();
   };
@@ -122,7 +124,7 @@ const CreateClient = (props) => {
 
   // handle click event of the Add button
   const handleAddClientList = () => {
-    setClientList([...clientList, { clientNumer: "" }]);
+    setClientList([...clientList, { clientNumber: "" }]);
     setCount(count + 1);
   };
 
@@ -174,6 +176,10 @@ const CreateClient = (props) => {
                 sx={{ mr: 1 }}
                 disableElevation
                 color="secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  postData(clientList, urlClient);
+                }}
               >
                 저장
               </Button>

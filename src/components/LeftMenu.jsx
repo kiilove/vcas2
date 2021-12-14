@@ -76,7 +76,7 @@ const LeftMenu = () => {
             </IconBox>
           </Tooltip>
           <Tooltip title="상담업무" placement="right">
-            <Link to="/maketingDetail">
+            <Link to="/marketingDetail">
               <IconBox>
                 <FontAwesomeIcon icon={faPhone} />
               </IconBox>

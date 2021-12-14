@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { blue, pink, yellow } from "@mui/material/colors";
+import { blue, grey, pink, yellow } from "@mui/material/colors";
 import Checkbox from "@mui/material/Checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -67,15 +67,61 @@ const ClientIcon = (icon) => (
   </CheckIcon>
 );
 
-const BasicInfo = () => {
+const BasicInfo = (props) => {
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+
+  const handleLike = () => {
+    setLike(!like);
+  };
+
+  const handleDisLike = () => {
+    setDisLike(!disLike);
+  };
+
+  const handleFavorite = () => {
+    setFavorite(!favorite);
+  };
+
+  const handleBasic = () => {
+    if (like === true) {
+      props.setBasicInfo({ clientStatus: "like", clientFavorite: favorite });
+    } else if (disLike === true) {
+      props.setBasicInfo({ clientStatus: "dislike", clientFavorite: favorite });
+    } else {
+      props.setBasicInfo({ clientStatus: "active", clientFavorite: favorite });
+    }
+  };
+
+  useEffect(() => {
+    handleBasic();
+  }, [like, disLike, favorite]);
+
   return (
     <InfoWrapper>
-      <InfoNumber>010-4643-3464</InfoNumber>
+      <InfoNumber>
+        {disLike ? (
+          <div style={{ textDecoration: "line-through", color: grey[400] }}>
+            {props.num}
+          </div>
+        ) : like ? (
+          <div style={{ color: blue[800] }}>{props.num}</div>
+        ) : (
+          props.num
+        )}
+      </InfoNumber>
       <InfoAction>
         <InfoCheckBox>
           <Checkbox
             icon={ClientIcon(frThumbsUp)}
             checkedIcon={ClientIcon(fsThumbsUp)}
+            checked={like}
+            disabled={disLike}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLike();
+            }}
             sx={{
               color: blue[800],
               "&.Mui-checked": {
@@ -88,6 +134,12 @@ const BasicInfo = () => {
           <Checkbox
             icon={ClientIcon(frThumbsDown)}
             checkedIcon={ClientIcon(fsThumbsDown)}
+            checked={disLike}
+            disabled={like}
+            onClick={(e) => {
+              e.preventDefault();
+              handleDisLike();
+            }}
             sx={{
               color: pink[800],
               "&.Mui-checked": {
@@ -100,6 +152,11 @@ const BasicInfo = () => {
           <Checkbox
             icon={ClientIcon(frBookmark)}
             checkedIcon={ClientIcon(fsBookmark)}
+            checked={favorite}
+            onClick={(e) => {
+              e.preventDefault();
+              handleFavorite();
+            }}
             sx={{
               color: yellow[800],
               "&.Mui-checked": {

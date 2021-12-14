@@ -1,6 +1,7 @@
-import { Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Button, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import { orange } from "@mui/material/colors";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 import ClientCard from "../clients/ClientCard";
 import {
   CanvasCustom,
@@ -12,6 +13,10 @@ import BasicInfo from "./BasicInfo";
 import ExtraInfo from "./ExtraInfo";
 import MemoInput from "./MemoInput";
 import TmMemoList from "./MemoList";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BASE_URL } from "../../config/base";
+import { putData } from "../modules/PostData";
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -39,7 +44,66 @@ const SubTitle = styled.span`
   text-align: center;
   margin-bottom: 20px;
 `;
-const MaketingDetail = () => {
+
+const MarketingActionWrapper = styled.div`
+  height: 50px;
+  width: 100%;
+  margin: 5px 0px;
+  display: flex;
+  align-items: center;
+  flex: 1;
+`;
+
+const MarketingActionBox = styled.div`
+  height: 50px;
+  width: 100%;
+  margin: 5px 0px;
+  display: flex;
+  align-items: center;
+  flex: 1;
+`;
+const MarketingDetail = ({ match }) => {
+  const [loading, setLoading] = useState(false);
+  const [getClients, setGetClients] = useState([]);
+  const [basicInfo, setBasicInfo] = useState([]);
+  const [extraInfo, setExtraInfo] = useState([]);
+  const { uid } = useParams();
+
+  const getData = async () => {
+    setLoading(true);
+    const header = { "Content-type": "application/json" };
+    try {
+      const res = await axios({
+        method: "get",
+        url: `${BASE_URL}/api/client/find/${uid}`,
+        headers: header,
+      });
+
+      setBasicInfo({
+        clientStatus: res.data.clientStatus,
+        clientFavorite: res.data.clientFavorite,
+      });
+      setExtraInfo({ ...res.data.clientExtra });
+      setGetClients(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      alert("불러오기 실패!");
+    }
+  };
+
+  useEffect(() => {
+    console.log(extraInfo);
+    getData();
+  }, []);
+
+  const updatedClient = () => {
+    const items = { ...basicInfo, ...extraInfo };
+    const url = `${BASE_URL}/api/client/${uid}`;
+
+    putData(items, url);
+  };
+
   return (
     <Container>
       <CanvasCustom style={{ flex: 1, marginBottom: 20, height: "auto" }}>
@@ -47,6 +111,9 @@ const MaketingDetail = () => {
           <ComponentHeaderTitle color={orange[500]}>
             상담 노트
           </ComponentHeaderTitle>
+          <MarketingActionWrapper>
+            <Button>저장</Button>
+          </MarketingActionWrapper>
         </ComponentHeaderWrapper>
       </CanvasCustom>
       <ComponentBodyWrapper style={{ border: "none", height: "auto" }}>
@@ -59,22 +126,20 @@ const MaketingDetail = () => {
               </div>
               <ListWrapper>
                 <ClientCard />
-                <ClientCard />
-                <ClientCard />
-                <ClientCard />
-                <ClientCard />
-                <ClientCard />
-                <ClientCard />
               </ListWrapper>
             </CanvasCustom>
           </Grid>
           <Grid xs={5} item>
             <Stack direction="column" spacing={2}>
               <CanvasCustom style={{ height: "200px" }}>
-                <BasicInfo />
+                <BasicInfo
+                  num={getClients.clientNumber}
+                  setBasicInfo={setBasicInfo}
+                  basicInfo={basicInfo}
+                />
               </CanvasCustom>
               <CanvasCustom style={{ height: "auto" }}>
-                <ExtraInfo />
+                <ExtraInfo setExtraInfo={setExtraInfo} extraInfo={extraInfo} />
               </CanvasCustom>
             </Stack>
           </Grid>
@@ -93,4 +158,4 @@ const MaketingDetail = () => {
     </Container>
   );
 };
-export default MaketingDetail;
+export default MarketingDetail;

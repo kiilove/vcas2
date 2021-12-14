@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Stack, TextField, Button } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
@@ -21,7 +21,15 @@ const ExtraSelectBox = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const ExtraInfo = () => {
+const ExtraInfo = (props) => {
+  const [gender, setGender] = useState(props.extraInfo.gender);
+  const [age, setAge] = useState(props.extraInfo.age);
+  const [level, setLevel] = useState(props.extraInfo.level);
+  const [name, setName] = useState(props.extraInfo.name);
+  const [telNum2, setTelNum2] = useState(props.extraInfo.telNum2);
+  const [info1, setInfo1] = useState(props.extraInfo.info1);
+  const [info2, setinfo2] = useState(props.extraInfo.info2);
+
   return (
     <ExtraWrapper>
       <Stack
@@ -35,15 +43,19 @@ const ExtraInfo = () => {
           <FormControl>
             <InputLabel variant="standard">성별</InputLabel>
             <NativeSelect
-              defaultValue={"man"}
+              defaultValue={"M"}
               inputProps={{
                 name: "sex",
                 id: "sex-native",
               }}
               sx={{ fontSize: 17 }}
+              onChange={(e) => {
+                e.preventDefault();
+                setGender(e.target.value);
+              }}
             >
-              <option value={"man"}>남성</option>
-              <option value={"woman"}>여성</option>
+              <option value={"M"}>남성</option>
+              <option value={"F"}>여성</option>
             </NativeSelect>
           </FormControl>
         </ExtraSelectBox>
@@ -57,6 +69,10 @@ const ExtraInfo = () => {
                 id: "age-native",
               }}
               sx={{ fontSize: 17 }}
+              onChange={(e) => {
+                e.preventDefault();
+                setAge(e.target.value);
+              }}
             >
               <option value={20}>20대</option>
               <option value={30}>30대</option>
@@ -77,6 +93,10 @@ const ExtraInfo = () => {
                 id: "know-native",
               }}
               sx={{ fontSize: 17 }}
+              onChange={(e) => {
+                e.preventDefault();
+                setLevel(e.target.value);
+              }}
             >
               <option value={0}>파악안됨</option>
               <option value={1}>경험없음</option>
@@ -94,10 +114,16 @@ const ExtraInfo = () => {
         width="100%"
         sx={{ mb: 3 }}
       >
-        <TextField size="small" label="이름" sx={{ width: "70%" }} />
-        <Button variant="outlined" sx={{ ml: 1, height: "40px" }}>
-          저장
-        </Button>
+        <TextField
+          size="small"
+          label="이름"
+          sx={{ width: "85%" }}
+          value={name}
+          onChange={(e) => {
+            e.preventDefault();
+            setName(e.target.value);
+          }}
+        />
       </Stack>
       <Stack
         direction="row"
@@ -106,10 +132,16 @@ const ExtraInfo = () => {
         width="100%"
         sx={{ mb: 3 }}
       >
-        <TextField size="small" label="추가연락처" sx={{ width: "70%" }} />
-        <Button variant="outlined" sx={{ ml: 1, height: "40px" }}>
-          저장
-        </Button>
+        <TextField
+          size="small"
+          label="추가연락처"
+          sx={{ width: "85%" }}
+          value={telNum2}
+          onChange={(e) => {
+            e.preventDefault();
+            setTelNum2(e.target.value);
+          }}
+        />
       </Stack>
       <Stack
         direction="row"
@@ -118,10 +150,16 @@ const ExtraInfo = () => {
         width="100%"
         sx={{ mb: 3 }}
       >
-        <TextField size="small" label="기타정보" sx={{ width: "70%" }} />
-        <Button variant="outlined" sx={{ ml: 1, height: "40px" }}>
-          저장
-        </Button>
+        <TextField
+          size="small"
+          label="기타정보"
+          sx={{ width: "85%" }}
+          value={info1}
+          onChange={(e) => {
+            e.preventDefault();
+            setInfo1(e.target.value);
+          }}
+        />
       </Stack>
       <Stack
         direction="row"
@@ -130,10 +168,16 @@ const ExtraInfo = () => {
         width="100%"
         sx={{ mb: 3 }}
       >
-        <TextField size="small" label="기타정보" sx={{ width: "70%" }} />
-        <Button variant="outlined" sx={{ ml: 1, height: "40px" }}>
-          저장
-        </Button>
+        <TextField
+          size="small"
+          label="기타정보"
+          sx={{ width: "85%" }}
+          value={info2}
+          onChange={(e) => {
+            e.preventDefault();
+            setinfo2(e.target.value);
+          }}
+        />
       </Stack>
     </ExtraWrapper>
   );

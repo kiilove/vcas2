@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
-import axios from "axios";
+
 import styled from "styled-components";
 import {
   Canvas,
@@ -14,6 +14,8 @@ import { green, grey, yellow } from "@mui/material/colors";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Tooltip } from "@mui/material";
+import { BASE_URL } from "../../config/base";
+import { postData } from "../modules/PostData";
 
 const Container = styled.div`
   position: absolute;
@@ -69,6 +71,7 @@ const CreateClientExcel = (props) => {
   const [items, setItems] = useState([]);
   const [rows, setRows] = useState(0);
   const [sendDisable, setSendDisable] = useState(true);
+  const urlExcel = `${BASE_URL}/api/client/register/clients`;
 
   const sendClose = () => {
     props.handleClose();
@@ -99,21 +102,6 @@ const CreateClientExcel = (props) => {
       };
     } catch (error) {
       console.error({ 읽기에러: error });
-    }
-  };
-
-  const postData = async () => {
-    const header = { "Content-type": "application/json" };
-    try {
-      await axios({
-        method: "post",
-        url: "http://localhost:7733/api/client/register/excel",
-        headers: header,
-        data: items,
-      });
-      alert("데이터 저장이 완료되었습니다.");
-    } catch (error) {
-      alert("저장 실패!(서버 연결을 확인하세요.)");
     }
   };
 
@@ -156,10 +144,12 @@ const CreateClientExcel = (props) => {
               <Button
                 variant="outlined"
                 size="small"
-                onClick={postData}
+                onClick={(e) => {
+                  e.preventDefault();
+                  postData(items, urlExcel);
+                }}
                 disabled={sendDisable}
                 color="success"
-                variant="contained"
                 disableElevation
               >
                 전송

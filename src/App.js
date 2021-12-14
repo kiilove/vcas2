@@ -1,7 +1,8 @@
 import { Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
 import ClientListCard from "./components/clients/ClientListCard";
-import MaketingDetail from "./components/maketing/MaketingDetail";
+import MarketingDetail from "./components/marketing/MarketingDetail";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -23,8 +24,11 @@ function App() {
         <Route path="/clientList">
           <Home child={<ClientListCard />} />
         </Route>
-        <Route path="/maketingDetail">
-          <Home child={<MaketingDetail />} />
+        <Route path="/marketingDetail/:uid">
+          <Home child={<MarketingDetail />} />
+        </Route>
+        <Route exact path="/marketingDetail">
+          <Home child={<MarketingDetail />} />
         </Route>
       </Switch>
     </div>

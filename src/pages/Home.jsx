@@ -6,7 +6,7 @@ import styled from "styled-components";
 import ClientListCard from "../components/clients/ClientListCard";
 import Header from "../components/Header";
 import LeftMenu from "../components/LeftMenu";
-import MaketingDetail from "../components/maketing/MaketingDetail";
+import MaketingDetail from "../components/marketing/MarketingDetail";
 
 const Contianer = styled.div`
   display: flex;
