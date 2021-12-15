@@ -67,6 +67,7 @@ const MarketingDetail = ({ match }) => {
   const [getClients, setGetClients] = useState([]);
   const [basicInfo, setBasicInfo] = useState([]);
   const [extraInfo, setExtraInfo] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
   const { uid } = useParams();
 
   const getData = async () => {
@@ -93,14 +94,14 @@ const MarketingDetail = ({ match }) => {
   };
 
   useEffect(() => {
-    console.log(extraInfo);
+    //console.log(extraInfo);
     getData();
   }, []);
 
   const updatedClient = () => {
     const items = { ...basicInfo, ...extraInfo };
-    const url = `${BASE_URL}/api/client/${uid}`;
-
+    const url = `${BASE_URL}/api/client/find/${uid}`;
+    //console.log(items);
     putData(items, url);
   };
 
@@ -111,8 +112,9 @@ const MarketingDetail = ({ match }) => {
           <ComponentHeaderTitle color={orange[500]}>
             상담 노트
           </ComponentHeaderTitle>
+          {JSON.stringify(getClients)}
           <MarketingActionWrapper>
-            <Button>저장</Button>
+            <Button onClick={updatedClient}>저장</Button>
           </MarketingActionWrapper>
         </ComponentHeaderWrapper>
       </CanvasCustom>
@@ -139,7 +141,11 @@ const MarketingDetail = ({ match }) => {
                 />
               </CanvasCustom>
               <CanvasCustom style={{ height: "auto" }}>
-                <ExtraInfo setExtraInfo={setExtraInfo} extraInfo={extraInfo} />
+                <ExtraInfo
+                  setGetClients={setGetClients}
+                  getClients={getClients}
+                  extraInfo={getClients.extraInfo}
+                />
               </CanvasCustom>
             </Stack>
           </Grid>

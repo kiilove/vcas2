@@ -22,14 +22,6 @@ const ExtraSelectBox = styled.div`
   align-items: center;
 `;
 const ExtraInfo = (props) => {
-  const [gender, setGender] = useState(props.extraInfo.gender);
-  const [age, setAge] = useState(props.extraInfo.age);
-  const [level, setLevel] = useState(props.extraInfo.level);
-  const [name, setName] = useState(props.extraInfo.name);
-  const [telNum2, setTelNum2] = useState(props.extraInfo.telNum2);
-  const [info1, setInfo1] = useState(props.extraInfo.info1);
-  const [info2, setinfo2] = useState(props.extraInfo.info2);
-
   return (
     <ExtraWrapper>
       <Stack
@@ -51,7 +43,10 @@ const ExtraInfo = (props) => {
               sx={{ fontSize: 17 }}
               onChange={(e) => {
                 e.preventDefault();
-                setGender(e.target.value);
+                props.setGetClient({
+                  ...props.extraInfo,
+                  [props.getClient.gender]: e.target.value,
+                });
               }}
             >
               <option value={"M"}>남성</option>
@@ -71,7 +66,10 @@ const ExtraInfo = (props) => {
               sx={{ fontSize: 17 }}
               onChange={(e) => {
                 e.preventDefault();
-                setAge(e.target.value);
+                props.setGetClient({
+                  ...props.extraInfo,
+                  [props.clientExtra.age]: e.target.value,
+                });
               }}
             >
               <option value={20}>20대</option>
@@ -95,7 +93,10 @@ const ExtraInfo = (props) => {
               sx={{ fontSize: 17 }}
               onChange={(e) => {
                 e.preventDefault();
-                setLevel(e.target.value);
+                props.setGetClient({
+                  ...props.extraInfo,
+                  [props.clientExtra.level]: e.target.value,
+                });
               }}
             >
               <option value={0}>파악안됨</option>
@@ -118,10 +119,13 @@ const ExtraInfo = (props) => {
           size="small"
           label="이름"
           sx={{ width: "85%" }}
-          value={name}
+          value={props.name}
           onChange={(e) => {
             e.preventDefault();
-            setName(e.target.value);
+            props.setGetClient({
+              ...props.extraInfo,
+              [props.clientExtra.name]: e.target.value,
+            });
           }}
         />
       </Stack>
@@ -136,10 +140,13 @@ const ExtraInfo = (props) => {
           size="small"
           label="추가연락처"
           sx={{ width: "85%" }}
-          value={telNum2}
+          value={props.telNum2}
           onChange={(e) => {
             e.preventDefault();
-            setTelNum2(e.target.value);
+            props.setGetClient({
+              ...props.extraInfo,
+              [props.clientExtra.telNum2]: e.target.value,
+            });
           }}
         />
       </Stack>
@@ -154,10 +161,13 @@ const ExtraInfo = (props) => {
           size="small"
           label="기타정보"
           sx={{ width: "85%" }}
-          value={info1}
+          value={props.info1}
           onChange={(e) => {
             e.preventDefault();
-            setInfo1(e.target.value);
+            props.setGetClient({
+              ...props.extraInfo,
+              [props.clientExtra.info1]: e.target.value,
+            });
           }}
         />
       </Stack>
@@ -172,10 +182,13 @@ const ExtraInfo = (props) => {
           size="small"
           label="기타정보"
           sx={{ width: "85%" }}
-          value={info2}
+          value={props.info2}
           onChange={(e) => {
             e.preventDefault();
-            setinfo2(e.target.value);
+            props.setGetClient({
+              ...props.extraInfo,
+              [props.clientExtra.info2]: e.target.value,
+            });
           }}
         />
       </Stack>
