@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Rating, Stack, TextField } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -42,7 +42,35 @@ const MemoTextBox = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const MemoInput = () => {
+const MemoInput = (props) => {
+  const [score, setScore] = useState(4);
+  const [content, setContent] = useState("");
+  const [writeDate, setWriteDate] = useState(Date().toLocaleString());
+  const [idx, setIdx] = useState(props.memoCount);
+  const [memoArray, setMemoArray] = useState([]);
+
+  const postMemo = () => {
+    const memoObject = [
+      {
+        id: idx + 1,
+        score,
+        content,
+        date: Date(),
+      },
+    ];
+
+    // console.log(typeof props.memoList);
+
+    props.setMemoList(props.memoList.concat(memoObject));
+
+    console.log(JSON.stringify(memoArray));
+  };
+
+  useEffect(() => {
+    setIdx(props.memoCount);
+    setMemoArray(props.memoList);
+  }, [props]);
+
   return (
     <MemoWrapper>
       <Stack
@@ -52,9 +80,17 @@ const MemoInput = () => {
         sx={{ mt: 2 }}
       >
         <MemoRatingBox>
-          <MemoRatingTitle>중요도</MemoRatingTitle>
+          <MemoRatingTitle>
+            중요도({score})/({idx})
+          </MemoRatingTitle>
           <MemoRating>
-            <Rating />
+            <Rating
+              value={score}
+              onChange={(e) => {
+                e.preventDefault();
+                setScore(e.target.value);
+              }}
+            />
           </MemoRating>
         </MemoRatingBox>
         <MemoTextBox>
@@ -65,10 +101,16 @@ const MemoInput = () => {
             minRows={4}
             maxRows={4}
             sx={{ width: "70%", mb: 1.5 }}
+            value={content}
+            onChange={(e) => {
+              e.preventDefault();
+              setContent(e.target.value);
+            }}
           />
           <Button
             variant="outlined"
             sx={{ width: "50px", height: "110px", mb: 1.5, ml: 1 }}
+            onClick={() => postMemo()}
           >
             작성
           </Button>

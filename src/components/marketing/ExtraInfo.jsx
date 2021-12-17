@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Stack, TextField } from "@mui/material";
+import { FormHelperText, Input, Stack, TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
@@ -22,6 +22,11 @@ const ExtraSelectBox = styled.div`
   align-items: center;
 `;
 const ExtraInfo = (props) => {
+  const [name, setName] = useState(props.extraInfo.name);
+  const [telNum2, setTelNum2] = useState(props.extraInfo.telNum2);
+  const [info1, setInfo1] = useState(props.extraInfo.info1);
+  const [info2, setInfo2] = useState(props.extraInfo.info2);
+
   return (
     <ExtraWrapper>
       <Stack
@@ -30,22 +35,23 @@ const ExtraInfo = (props) => {
         spacing={2}
         height="100px"
         sx={{ mt: 2, mb: 2 }}
+        component="form"
       >
         <ExtraSelectBox>
           <FormControl>
             <InputLabel variant="standard">성별</InputLabel>
             <NativeSelect
-              defaultValue={"M"}
+              value={props.extraInfo.gender}
               inputProps={{
-                name: "sex",
-                id: "sex-native",
+                name: "gender",
+                id: "gender-native",
               }}
               sx={{ fontSize: 17 }}
               onChange={(e) => {
                 e.preventDefault();
-                props.setGetClient({
+                props.setExtraInfo({
                   ...props.extraInfo,
-                  [props.getClient.gender]: e.target.value,
+                  gender: e.target.value,
                 });
               }}
             >
@@ -58,7 +64,7 @@ const ExtraInfo = (props) => {
           <FormControl>
             <InputLabel variant="standard">연령대</InputLabel>
             <NativeSelect
-              defaultValue={30}
+              value={props.extraInfo.age}
               inputProps={{
                 name: "age",
                 id: "age-native",
@@ -66,9 +72,9 @@ const ExtraInfo = (props) => {
               sx={{ fontSize: 17 }}
               onChange={(e) => {
                 e.preventDefault();
-                props.setGetClient({
+                props.setExtraInfo({
                   ...props.extraInfo,
-                  [props.clientExtra.age]: e.target.value,
+                  age: e.target.value,
                 });
               }}
             >
@@ -85,7 +91,7 @@ const ExtraInfo = (props) => {
           <FormControl>
             <InputLabel variant="standard">투자경험</InputLabel>
             <NativeSelect
-              defaultValue={0}
+              value={props.extraInfo.level}
               inputProps={{
                 name: "know",
                 id: "know-native",
@@ -93,9 +99,9 @@ const ExtraInfo = (props) => {
               sx={{ fontSize: 17 }}
               onChange={(e) => {
                 e.preventDefault();
-                props.setGetClient({
+                props.setExtraInfo({
                   ...props.extraInfo,
-                  [props.clientExtra.level]: e.target.value,
+                  level: e.target.value,
                 });
               }}
             >
@@ -109,22 +115,24 @@ const ExtraInfo = (props) => {
         </ExtraSelectBox>
       </Stack>
       <Stack
-        direction="row"
+        direction={"row"}
         justifyContent="center"
         alignItems="center"
         width="100%"
         sx={{ mb: 3 }}
       >
         <TextField
+          id="name"
           size="small"
-          label="이름"
           sx={{ width: "85%" }}
-          value={props.name}
+          InputLabelProps={{ shrink: true }}
+          value={props.extraInfo.name}
+          label="이름"
           onChange={(e) => {
             e.preventDefault();
-            props.setGetClient({
+            props.setExtraInfo({
               ...props.extraInfo,
-              [props.clientExtra.name]: e.target.value,
+              name: e.target.value,
             });
           }}
         />
@@ -135,17 +143,20 @@ const ExtraInfo = (props) => {
         alignItems="center"
         width="100%"
         sx={{ mb: 3 }}
+        component="form"
       >
         <TextField
           size="small"
           label="추가연락처"
           sx={{ width: "85%" }}
-          value={props.telNum2}
+          InputLabelProps={{ shrink: true }}
+          value={props.extraInfo.telNum2}
+          defaultValue={props.extraInfo.telNum2}
           onChange={(e) => {
             e.preventDefault();
-            props.setGetClient({
+            props.setExtraInfo({
               ...props.extraInfo,
-              [props.clientExtra.telNum2]: e.target.value,
+              telNum2: e.target.value,
             });
           }}
         />
@@ -156,17 +167,19 @@ const ExtraInfo = (props) => {
         alignItems="center"
         width="100%"
         sx={{ mb: 3 }}
+        component="form"
       >
         <TextField
           size="small"
           label="기타정보"
           sx={{ width: "85%" }}
-          value={props.info1}
+          InputLabelProps={{ shrink: true }}
+          value={props.extraInfo.info1}
           onChange={(e) => {
             e.preventDefault();
-            props.setGetClient({
+            props.setExtraInfo({
               ...props.extraInfo,
-              [props.clientExtra.info1]: e.target.value,
+              info1: e.target.value,
             });
           }}
         />
@@ -177,17 +190,19 @@ const ExtraInfo = (props) => {
         alignItems="center"
         width="100%"
         sx={{ mb: 3 }}
+        component="form"
       >
         <TextField
           size="small"
           label="기타정보"
           sx={{ width: "85%" }}
-          value={props.info2}
+          InputLabelProps={{ shrink: true }}
+          value={props.extraInfo.info2}
           onChange={(e) => {
             e.preventDefault();
-            props.setGetClient({
+            props.setExtraInfo({
               ...props.extraInfo,
-              [props.clientExtra.info2]: e.target.value,
+              info2: e.target.value,
             });
           }}
         />

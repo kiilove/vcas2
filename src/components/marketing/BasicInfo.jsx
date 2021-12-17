@@ -16,6 +16,8 @@ import {
   faBookmark as frBookmark,
   faThumbsDown as frThumbsDown,
 } from "@fortawesome/free-regular-svg-icons";
+import { BASE_URL } from "../../config/base";
+import { putData } from "../modules/PostData";
 
 const InfoWrapper = styled.div`
   height: 100%;
@@ -68,6 +70,7 @@ const ClientIcon = (icon) => (
 );
 
 const BasicInfo = (props) => {
+  const [propData, setPropdata] = useState([]);
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
   const [favorite, setFavorite] = useState(false);
@@ -84,33 +87,68 @@ const BasicInfo = (props) => {
     setFavorite(!favorite);
   };
 
-  const handleBasic = () => {
-    if (like === true) {
-      props.setBasicInfo({ clientStatus: "like", clientFavorite: favorite });
-    } else if (disLike === true) {
-      props.setBasicInfo({ clientStatus: "dislike", clientFavorite: favorite });
-    } else {
-      props.setBasicInfo({ clientStatus: "active", clientFavorite: favorite });
-    }
-  };
+  // const handleBasic = () => {
+  //   if (like === true) {
+  //     props.setBasicInfo({ clientStatus: "like", clientFavorite: favorite });
+  //   } else if (disLike === true) {
+  //     props.setBasicInfo({ clientStatus: "dislike", clientFavorite: favorite });
+  //   } else {
+  //     props.setBasicInfo({ clientStatus: "active", clientFavorite: favorite });
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   handleBasic();
+  // }, [like, disLike, favorite]);
 
   useEffect(() => {
-    handleBasic();
+    setPropdata(props.basicInfo);
+
+    if (propData.clientStatus !== undefined || null) {
+      setLike(propData.clientStatus.like);
+      setDisLike(propData.clientStatus.dislike);
+      setFavorite(propData.clientStatus.favorite);
+    }
+  }, [props]);
+
+  useEffect(() => {
+    if (propData.clientStatus !== undefined || null) {
+      const basicObject = {
+        ...propData,
+        clientStatus: {
+          ...propData.clientStatus,
+          like: like,
+          dislike: disLike,
+          favorite: favorite,
+        },
+      };
+      //Object.values(tempObject).length > 0 && alert("!!");
+      // console.log(Object.values(tempObject));
+
+      console.log(basicObject.clientStatus);
+      //const items = { ...basicInfo, clientExtra: extraInfo };
+      const url = `${BASE_URL}/api/client/find/${props.uid}`;
+      //console.log(items);
+      putData(basicObject, url);
+    }
   }, [like, disLike, favorite]);
+
+  //console.log(JSON.stringify(propData));
 
   return (
     <InfoWrapper>
       <InfoNumber>
         {disLike ? (
           <div style={{ textDecoration: "line-through", color: grey[400] }}>
-            {props.num}
+            {propData.clientNumber}
           </div>
         ) : like ? (
-          <div style={{ color: blue[800] }}>{props.num}</div>
+          <div style={{ color: blue[800] }}>{propData.clientNumber}</div>
         ) : (
-          props.num
+          propData.clientNumber
         )}
       </InfoNumber>
+
       <InfoAction>
         <InfoCheckBox>
           <Checkbox
@@ -120,7 +158,7 @@ const BasicInfo = (props) => {
             disabled={disLike}
             onClick={(e) => {
               e.preventDefault();
-              handleLike();
+              handleLike({ like });
             }}
             sx={{
               color: blue[800],

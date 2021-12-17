@@ -122,7 +122,8 @@ const dummyMemo = [
   { id: 9, content: "2021-11-30 계약성공", point: 5 },
 ];
 
-const TmMemoList = () => {
+const TmMemoList = (props) => {
+  //console.log(props.memoList[0]);
   return (
     <MemoWrapper>
       <Stack px={3} py={1} spacing={2}>
@@ -136,13 +137,13 @@ const TmMemoList = () => {
           </IconButton>
         </MemoActionBox>
         <MemoItemBox>
-          {dummyMemo.map((item, index) => (
+          {props.memoList.map((item, index) => (
             <>
               <MemoItemsWrapper>
-                <MemoItemsIcon>{MemoPoint[item.point - 1]}</MemoItemsIcon>
-                <MemoItemsText>{item.content}</MemoItemsText>
+                <MemoItemsIcon>{MemoPoint[item.score - 1]}</MemoItemsIcon>
+                <MemoItemsText>{`${item.content}`}</MemoItemsText>
               </MemoItemsWrapper>
-              {index < dummyMemo.length - 1 && (
+              {index < props.memoList.length - 1 && index !== 0 && (
                 <Divider
                   style={{ width: "90%" }}
                   sx={{ bgcolor: blueGrey[100] }}

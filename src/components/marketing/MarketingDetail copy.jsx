@@ -14,8 +14,9 @@ import ExtraInfo from "./ExtraInfo";
 import MemoInput from "./MemoInput";
 import TmMemoList from "./MemoList";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { BASE_URL } from "../../config/base";
-import { getData, putData } from "../modules/PostData";
+import { putData } from "../modules/PostData";
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -61,26 +62,37 @@ const MarketingActionBox = styled.div`
   align-items: center;
   flex: 1;
 `;
-const MarketingDetail = () => {
+const MarketingDetail = ({ match }) => {
+  const [getClients, setGetClients] = useState([]);
   const [basicInfo, setBasicInfo] = useState([]);
   const [extraInfo, setExtraInfo] = useState([]);
   const [memoList, setMemoList] = useState([]);
   const { uid } = useParams();
 
-  const url = `${BASE_URL}/api/client/find/${uid}`;
-  const getClient = () => {
-    getData(url).then((res) => {
+  const getData = async () => {
+    const header = { "Content-type": "application/json" };
+    try {
+      const res = await axios({
+        method: "get",
+        url: `${BASE_URL}/api/client/find/${uid}`,
+        headers: header,
+      });
+
       setBasicInfo({
         clientNumber: res.data.clientNumber,
         clientStatus: res.data.clientStatus,
       });
       setExtraInfo({ ...res.data.clientExtra });
       setMemoList([...res.data.clientMemo]);
-    });
+      setGetClients(res.data);
+    } catch (err) {
+      console.log(err);
+      alert("불러오기 실패!");
+    }
   };
 
   useEffect(() => {
-    getClient();
+    getData();
   }, []);
 
   const updatedClient = () => {
@@ -90,9 +102,9 @@ const MarketingDetail = () => {
     putData(items, url);
   };
 
-  // useEffect(() => {
-  //   updatedClient();
-  // }, [extraInfo, memoList]);
+  useEffect(() => {
+    updatedClient();
+  }, [extraInfo, memoList]);
   return (
     <Container>
       <CanvasCustom style={{ flex: 1, marginBottom: 20, height: "auto" }}>
