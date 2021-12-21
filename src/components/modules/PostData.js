@@ -8,7 +8,8 @@ export const getData = async (url) => {
       url: url,
       headers: header,
     });
-    return res;
+
+    return res.data;
   } catch (err) {
     console.log(err);
     //alert(err);

@@ -62,43 +62,58 @@ const MarketingActionBox = styled.div`
   flex: 1;
 `;
 const MarketingDetail = () => {
+  const [resData, setResData] = useState([]);
   const [basicInfo, setBasicInfo] = useState([]);
   const [extraInfo, setExtraInfo] = useState([]);
-  const [memoList, setMemoList] = useState([]);
+  const [memoInfo, setMemoInfo] = useState([]);
   const { uid } = useParams();
 
-  const url = `${BASE_URL}/api/client/find/${uid}`;
-  const getClient = () => {
-    getData(url).then((res) => {
-      setBasicInfo({
-        clientNumber: res.data.clientNumber,
-        clientStatus: res.data.clientStatus,
-      });
-      setExtraInfo({ ...res.data.clientExtra });
-      setMemoList([...res.data.clientMemo]);
-    });
-  };
+  const getUrl = `${BASE_URL}/api/client/find/${uid}`;
+  const putUrl = getUrl;
 
   useEffect(() => {
+    const getClient = () => {
+      getData(getUrl).then((res) => {
+        setResData(res);
+        setBasicInfo(() => {
+          return {
+            clientNumber: res.clientNumber,
+            clientStatus: res.clientStatus,
+          };
+        });
+        setExtraInfo(() => {
+          return res.clientExtra;
+        });
+        setMemoInfo(() => {
+          return [res.clientMemo];
+        });
+      });
+    };
     getClient();
   }, []);
 
   const updatedClient = () => {
-    const items = { clientExtra: extraInfo, clientMemo: memoList };
+    const items = {
+      clientNumber: basicInfo.clientNumber,
+      clientStatus: basicInfo.clientStatus,
+      clientExtra: extraInfo,
+      clientMemo: memoInfo,
+    };
     const url = `${BASE_URL}/api/client/find/${uid}`;
-    //console.log(items);
-    putData(items, url);
+    //putData(items, url);
   };
 
   // useEffect(() => {
   //   updatedClient();
-  // }, [extraInfo, memoList]);
+  // }, [basicInfo, extraInfo, memoList]);
+
   return (
     <Container>
       <CanvasCustom style={{ flex: 1, marginBottom: 20, height: "auto" }}>
         <ComponentHeaderWrapper>
           <ComponentHeaderTitle color={orange[500]}>
-            상담 노트
+            상담 노트{JSON.stringify(basicInfo)}
+            {JSON.stringify(extraInfo)}
           </ComponentHeaderTitle>
 
           <MarketingActionWrapper>
@@ -122,14 +137,10 @@ const MarketingDetail = () => {
           <Grid xs={5} item>
             <Stack direction="column" spacing={2}>
               <CanvasCustom style={{ height: "200px" }}>
-                <BasicInfo
-                  setBasicInfo={setBasicInfo}
-                  basicInfo={basicInfo}
-                  uid={uid}
-                />
+                <BasicInfo basicInfo={basicInfo} putUrl={putUrl} />
               </CanvasCustom>
               <CanvasCustom style={{ height: "auto" }}>
-                <ExtraInfo setExtraInfo={setExtraInfo} extraInfo={extraInfo} />
+                <ExtraInfo extraInfo={extraInfo} putUrl={putUrl} />
               </CanvasCustom>
             </Stack>
           </Grid>
@@ -138,14 +149,14 @@ const MarketingDetail = () => {
               <CanvasCustom style={{ height: "200px", padding: "10px" }}>
                 <MemoInput
                   uid={uid}
-                  memoCount={memoList.length}
-                  memoList={memoList}
-                  setMemoList={setMemoList}
+                  memoCount={memoInfo.length}
+                  memoInfo={memoInfo}
+                  setMemoInfo={setMemoInfo}
                 />
-                {memoList.length}
+                {memoInfo.length}
               </CanvasCustom>
               <CanvasCustom style={{ height: "auto" }}>
-                <TmMemoList uid={uid} memoList={memoList} />
+                <TmMemoList uid={uid} memoInfo={memoInfo} />
               </CanvasCustom>
             </Stack>
           </Grid>

@@ -70,7 +70,7 @@ const ClientIcon = (icon) => (
 );
 
 const BasicInfo = (props) => {
-  const [propData, setPropdata] = useState([]);
+  const [propData, setPropData] = useState({});
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
   const [favorite, setFavorite] = useState(false);
@@ -102,7 +102,9 @@ const BasicInfo = (props) => {
   // }, [like, disLike, favorite]);
 
   useEffect(() => {
-    setPropdata(props.basicInfo);
+    setPropData(() => {
+      return props.basicInfo;
+    });
 
     if (propData.clientStatus !== undefined || null) {
       setLike(propData.clientStatus.like);
@@ -122,14 +124,9 @@ const BasicInfo = (props) => {
           favorite: favorite,
         },
       };
-      //Object.values(tempObject).length > 0 && alert("!!");
-      // console.log(Object.values(tempObject));
+      console.log(basicObject);
 
-      console.log(basicObject.clientStatus);
-      //const items = { ...basicInfo, clientExtra: extraInfo };
-      const url = `${BASE_URL}/api/client/find/${props.uid}`;
-      //console.log(items);
-      putData(basicObject, url);
+      putData(basicObject, props.putUrl);
     }
   }, [like, disLike, favorite]);
 

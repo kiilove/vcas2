@@ -137,13 +137,13 @@ const TmMemoList = (props) => {
           </IconButton>
         </MemoActionBox>
         <MemoItemBox>
-          {props.memoList.map((item, index) => (
+          {props.memoInfo.map((item, index) => (
             <>
               <MemoItemsWrapper>
                 <MemoItemsIcon>{MemoPoint[item.score - 1]}</MemoItemsIcon>
                 <MemoItemsText>{`${item.content}`}</MemoItemsText>
               </MemoItemsWrapper>
-              {index < props.memoList.length - 1 && index !== 0 && (
+              {index < props.memoInfo.length - 1 && index !== 0 && (
                 <Divider
                   style={{ width: "90%" }}
                   sx={{ bgcolor: blueGrey[100] }}
